@@ -168,6 +168,26 @@ exports.default = void 0;
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var _default = {
   name: "side-navigation",
   data: function data() {
@@ -231,6 +251,10 @@ var _default = {
             var r = Math.floor(Math.random() * 10);
             r = r < 1 ? 3 : r;
             for (var j = 0; j < r; j++) {
+              var url = "/static/test/" + (j + 1) + ".jpg";
+              var name = "商品" + j;
+              var price = "39.9";
+              var soldCount = j + 50;
               list.push(j);
             }
             main.push({

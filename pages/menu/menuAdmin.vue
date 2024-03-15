@@ -15,8 +15,28 @@
 					<view class="rigth_title">
 						{{item.title}}
 					</view>
-					<view class="lis" v-for="(items,j) in item.list" :key='j'>
-						{{items}}
+					
+					<view class="lis" v-for="(product,j) in item.list" :key='j'>
+						<!-- 商品图片 -->
+						<view class="product-image">
+						  <image :src="product.image" class="image"></image>
+						</view>
+						<!-- 商品信息 -->
+						<view class="product-info">
+						  <!-- 商品名称 -->
+						  <view class="product-name">{{ product.name }}</view>
+						  <!-- 商品价格和已售数量 -->
+						  <view class="product-details">
+						    <text class="price">￥{{ product.price }}</text>
+						    <text class="sold-count">已售{{ product.soldCount }}件</text>
+						  </view>
+						  <!-- 选择框和数量控制 -->
+						  <view class="selection">
+						    <view class="minus-btn" @click="decrement(index)">-</view>
+						    <view class="quantity">{{ product.quantity }}</view>
+						    <view class="plus-btn" @click="increment(index)">+</view>
+						  </view>
+						</view>
 					</view>
 				</view>
 				<view class="fill-last" :style="{ height: fillHeight + 'px' }"></view>
@@ -91,6 +111,11 @@
 							let r = Math.floor(Math.random() * 10);
 							r = r < 1 ? 3 : r;
 							for (let j = 0; j < r; j++) {
+								let url = "/static/test/" + (j+1) + ".jpg";
+								let name = "商品" + j;
+								let price = "39.9";
+								let soldCount = j + 50;
+								
 								list.push(j);
 							}
 							main.push({
