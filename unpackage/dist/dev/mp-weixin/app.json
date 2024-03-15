@@ -1,0 +1,49 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/ucenter/ucenter",
+    "pages/menu/menuAdmin",
+    "pages/order/orderAdmin"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "私厨",
+    "navigationBarBackgroundColor": "#ff6fb0",
+    "backgroundColor": "#d0d3da",
+    "enablePullDownRefresh": true
+  },
+  "tabBar": {
+    "color": "#aaaaff",
+    "selectedColor": "#00ffff",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "static/index.png",
+        "selectedIconPath": "static/index.png"
+      },
+      {
+        "pagePath": "pages/ucenter/ucenter",
+        "text": "我的",
+        "iconPath": "static/test.png",
+        "selectedIconPath": "static/test.png"
+      },
+      {
+        "pagePath": "pages/order/orderAdmin",
+        "text": "订单管理",
+        "iconPath": "static/order.png",
+        "selectedIconPath": "static/order.png"
+      },
+      {
+        "pagePath": "pages/menu/menuAdmin",
+        "text": "全部商品",
+        "iconPath": "static/menu.png",
+        "selectedIconPath": "static/menu.png"
+      }
+    ]
+  },
+  "usingComponents": {}
+}

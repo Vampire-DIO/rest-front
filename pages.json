@@ -1,0 +1,72 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				
+			}
+			
+		},
+		{
+			"path": "pages/ucenter/ucenter",
+			"style": {
+				"navigationBarTitleText": "个人中心"
+			}
+		},
+		{
+			"path": "pages/menu/menuAdmin"
+		},
+		{
+			"path": "pages/order/orderAdmin"
+		}
+	],
+	"tabBar": {
+		"color": "#aaaaff",
+		"selectedColor": "#00ffff",
+		"backgroundColor": "#ffffff",
+		"borderStyle": "white",
+		"list": [
+			{
+				"pagePath": "pages/index/index",
+				"text": "首页",
+				"iconPath": "static/index.png",
+				"selectedIconPath": "static/index.png"
+			},
+			{
+				"pagePath": "pages/ucenter/ucenter",
+				"text": "我的",
+				"iconPath": "static/test.png",
+				"selectedIconPath": "static/test.png"
+			},
+			{
+				"pagePath": "pages/order/orderAdmin",
+				"text": "订单管理",
+				"iconPath": "static/order.png",
+				"selectedIconPath": "static/order.png"
+			},
+			{
+				"pagePath": "pages/menu/menuAdmin",
+				"text": "全部商品",
+				"iconPath": "static/menu.png",
+				"selectedIconPath": "static/menu.png"
+			}
+		]
+	},
+	"condition": {
+		"current": 0,
+		"list": [
+			{
+				"name": "ucenter",
+				"path": "pages/ucenter/ucenter"
+			}
+		]
+	},
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "私厨",
+		"navigationBarBackgroundColor": "#ff6fb0",
+		"backgroundColor": "#d0d3da",
+		"enablePullDownRefresh": true
+	},
+	"uniIdRouter": {}
+}

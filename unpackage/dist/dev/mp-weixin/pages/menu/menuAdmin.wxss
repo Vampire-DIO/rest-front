@@ -1,0 +1,33 @@
+
+page,.bodys {
+	height: 100%;
+}
+.scroll_box {
+	display: flex;
+	height: 100%;
+}
+.left_box {
+	width: 30%;
+	border-right: 1px solid #e2e7c8;
+	background-color: #fae3ef;
+}
+.left_item {
+	height: 80rpx;
+	display: grid;
+	place-items: center;
+}
+.lis {
+	height: 200rpx;
+	border-radius: 10rpx;
+	background: #808080;
+	color: #FFFFFF;
+	text-align: center;
+	line-height: 200rpx;
+	margin-bottom: 10rpx;
+}
+.select {
+	  border-color: #007bff; 
+	  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.1); 
+	  background-color: #f8f9fa;
+}
+
