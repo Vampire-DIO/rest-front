@@ -1,0 +1,24 @@
+<navigation-bar title="Weixin" back="{{false}}" color="black" background="#FFF">
+</navigation-bar>
+<view class="container" style="padding-top: 0%;">
+    <van-search class="search" value="{{ value }}" placeholder="请输入搜索关键词" />
+    <van-row style="width: 100%;">
+      <van-col span="6">
+        <van-sidebar active-key="{{ activeKey }}" bind:change="categoryChange">
+          <van-sidebar-item wx:key="item.categoryId" id="{{item.categoryId}}" wx:for="{{ categorys }}" wx:key="item.categoryName" title="{{ item.categoryName}}"/>
+        </van-sidebar>
+      </van-col>
+      <van-col span="18" style="height: 100%;">
+        <scroll-view :loading="{{loading}}" class="scrollarea" style="width: 100%;height: {{menuScrollHeight}}px;" scroll-y type="list" >
+          <van-card wx:for="{{currentMenus}}" num="{{item.soldNum}}" price="{{item.price}}" desc="描述信息" title="{{item.name}}" thumb="{{item.pics[0]}}">
+            <view slot="footer">
+              <van-stepper value="{{ 0 }}" min="0" input-width="40px" button-size="32px" />
+            </view>
+          </van-card>
+        </scroll-view>
+      </van-col>
+    </van-row>
+
+ 
+
+</view>
