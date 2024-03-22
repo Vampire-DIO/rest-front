@@ -1,0 +1,11 @@
+<navigation-bar title="Weixin" back="{{false}}" color="black" background="#FFF">
+</navigation-bar>
+<view class="container" style="padding-top: 0%;">
+  <van-image
+  width="12rem"
+  height="12rem"
+  fit="contain"
+  src="https://img.yzcdn.cn/vant/cat.jpeg"
+/>
+  <van-steps direction="vertical" style="width: 100%" steps="{{ steps }}" active="{{ status }}" />
+</view>

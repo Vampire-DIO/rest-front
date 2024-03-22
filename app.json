@@ -2,7 +2,7 @@
   "pages": [
     "pages/index/index",
     "pages/menu/menu",
-    "custom-tab-bar/index"
+    "pages/order/order"
   ],
   "tabBar": {
     "custom": true,
@@ -15,6 +15,9 @@
       },
       {
         "pagePath": "pages/index/index"
+      },
+      {
+        "pagePath": "pages/order/order"
       }
     ]
   },
@@ -35,11 +38,12 @@
   "sitemapLocation": "sitemap.json",
   "lazyCodeLoading": "requiredComponents",
   "usingComponents": {
+    "van-notify": "@vant/weapp/notify/index",
     "van-loading": "@vant/weapp/loading/index",
     "van-card": "@vant/weapp/card/index",
     "van-swipe-cell": "@vant/weapp/swipe-cell/index",
     "van-sidebar": "@vant/weapp/sidebar/index",
-  "van-sidebar-item": "@vant/weapp/sidebar-item/index",
+    "van-sidebar-item": "@vant/weapp/sidebar-item/index",
     "van-tree-select": "@vant/weapp/tree-select/index",
     "van-search": "@vant/weapp/search/index",
     "van-tabbar": "@vant/weapp/tabbar/index",
@@ -48,6 +52,12 @@
     "van-col": "@vant/weapp/col/index",
     "van-button": "@vant/weapp/button/index",
     "van-stepper": "@vant/weapp/stepper/index",
-    "navigation-bar": "/components/navigation-bar/navigation-bar"
+    "navigation-bar": "/components/navigation-bar/navigation-bar",
+    "van-toast": "@vant/weapp/toast/index",
+    "van-popup": "@vant/weapp/popup/index",
+    "van-icon": "@vant/weapp/icon/index",
+    "van-submit-bar": "@vant/weapp/submit-bar/index",
+    "van-steps": "@vant/weapp/steps/index",
+    "van-image": "@vant/weapp/image/index"
   }
 }

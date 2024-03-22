@@ -15,6 +15,12 @@ Component({
         text: '菜单',
         name: 'menu',
         icon: 'user-o'
+      },
+      {
+        pagePath: '/pages/order/order',
+        text: '订单',
+        name: 'order',
+        icon: 'logistics'
       }
     ]
   },
