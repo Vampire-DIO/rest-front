@@ -31,7 +31,7 @@
 								<view class="good-description">
 									{{item.description}}
 								</view>
-								<uni-number-box @change="changeValue" />
+								<uni-number-box :min="0" v-model="item.quantity" @change="changeValue(item)" />
 							</view>
 						</view>
 					</block>
@@ -39,23 +39,41 @@
 			</uni-col>
 		</uni-row>
 
-
-		<uni-fab v-if="cartShow" :pattern="pattern" @fabClick="showCart">
+		<uni-fab :pattern="pattern" @fabClick="showCart">
 
 		</uni-fab>
 
-
-		<u-popup :show="show" @close="close" @open="open">
-			<view>
-				<text>出淤泥而不染，濯清涟而不妖</text>
-			</view>
-			<u-empty
-			        mode="car"
-			        icon="http://cdn.uviewui.com/uview/empty/car.png"
-			>
+		<u-popup :round="10" :show="show" @close="close" @open="open">
+			<u-empty v-if="this.cart.length == 0" mode="car" icon="http://cdn.uviewui.com/uview/empty/car.png">
 			</u-empty>
+			<scroll-view scroll-y="true" style="height: 600rpx;">
+				<block v-for="(item, index) in cart" :key="index" class="block-item">
+					<view class="good-detail2">
+						<swiper class="good-img-swiper" circular :indicator-dots="true" :autoplay="true"
+							:interval="2000" :duration="500">
+							<swiper-item v-for="(img, sIndex) in item.pics" :key="sIndex">
+								<image class="good-img" mode="aspectFit" :src="img" @error="imageLoadError"></image>
+							</swiper-item>
+						</swiper>
+						<view class="good">
+							<view class="good-name" style="font-weight: bold;">
+								<text>{{item.name}}</text>
+							</view>
+							<view style="text-overflow: ellipsis;
+									white-space: nowrap;
+									overflow: hidden;
+									width: 400rpx;">
+								{{item.description}}
+							</view>
+							<view style="position: relative; right: -100%; top: 30px;">
+								数量: X {{item.quantity}}
+							</view>
+						</view>
+					</view>
+				</block>
+			</scroll-view>
+			<u-button type="error" :disabled="this.cart.length == 0" color="linear-gradient(to right, rgb(255, 170, 255), rgb(213, 51, 186))">下单</u-button>
 		</u-popup>
-		<u-button @click="show = true">打开</u-button>
 	</view>
 
 
@@ -66,7 +84,7 @@
 	export default {
 		data() {
 			return {
-				show: true,
+				show: false,
 				pattern: {
 					backgroundColor: "pink",
 					buttonColor: "pink",
@@ -82,7 +100,8 @@
 				},
 				token: '',
 				categorys: [],
-				menus: []
+				menus: [],
+				cart: []
 			}
 		},
 
@@ -91,15 +110,29 @@
 			this.getData();
 		},
 		methods: {
+			changeValue(item) {
+				console.log(item);
+				let index = this.cart.findIndex(i => i.id === item.id);
+				if (index === -1) {
+					this.cart.push(item);
+				} else {
+					this.cart.splice(index, 1, item);;
+				}
+				console.log('cart', this.cart);
+			},
+			showCart() {
+				this.show = true;
+				let cart = this.cart.filter(item => item.quantity > 0).map(item => ({
+					...item
+				}));
+				console.log(cart);
+				this.cart = cart;
+			},
 			open() {
 				this.show = true;
 			},
 			close() {
 				this.show = false;
-			},
-			showCart() {
-				this.cartShow = false;
-				this.popupShow = true;
 			},
 			imageLoadError(e) {
 				console.log(e)
@@ -166,6 +199,11 @@
 </script>
 
 <style>
+	.good-detail2 {
+		display: flex;
+		border-bottom: 1rpx solid rosybrown;
+	}
+
 	.good-detail {
 		display: inline-flex;
 		width: 100%;
