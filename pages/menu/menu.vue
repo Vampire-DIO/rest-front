@@ -45,12 +45,17 @@
 		</uni-fab>
 
 
-		<uni-popup ref="popup" type="bottom" background-color="red">
-			<uni-popup-message type="success" message="成功消息" :duration="2000"></uni-popup-message>
-			<view>出淤泥而不染，濯清涟而不妖</view>
-		</uni-popup>
-
-		<button @click="open">打开</button>
+		<u-popup :show="show" @close="close" @open="open">
+			<view>
+				<text>出淤泥而不染，濯清涟而不妖</text>
+			</view>
+			<u-empty
+			        mode="car"
+			        icon="http://cdn.uviewui.com/uview/empty/car.png"
+			>
+			</u-empty>
+		</u-popup>
+		<u-button @click="show = true">打开</u-button>
 	</view>
 
 
@@ -61,6 +66,7 @@
 	export default {
 		data() {
 			return {
+				show: true,
 				pattern: {
 					backgroundColor: "pink",
 					buttonColor: "pink",
@@ -79,14 +85,18 @@
 				menus: []
 			}
 		},
-		open(){
-			this.$refs.popup.open()
-		},
+
 		onShow() {
 			this.clearData();
 			this.getData();
 		},
 		methods: {
+			open() {
+				this.show = true;
+			},
+			close() {
+				this.show = false;
+			},
 			showCart() {
 				this.cartShow = false;
 				this.popupShow = true;
