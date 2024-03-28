@@ -1,0 +1,53 @@
+{
+	"pages": [
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+			"path": "pages/menu/menu",
+			"style": {
+				"navigationBarTitleText": "菜单"
+			}
+		},
+		{
+			"path": "pages/order/order",
+			"style": {
+				"navigationBarTitleText": "订单"
+			}
+		},
+		{
+			"path": "pages/login/login"
+		}
+	
+	],
+	"tabBar": {
+		"list": [{
+			"pagePath": "pages/index/index",
+			"iconPath": "static/tab/user.png",
+			"selectedIconPath": "static/tab/user.png",
+			"text": "首页"
+		}, {
+			"pagePath": "pages/menu/menu",
+			"iconPath": "static/tab/shopping-fill.png",
+			"selectedIconPath": "static/tab/shopping-fill.png",
+			"text": "店铺"
+		}, {
+			"pagePath": "pages/order/order",
+			"iconPath": "static/tab/user.png",
+			"selectedIconPath": "static/tab/user.png",
+			"text": "订单"
+		}]
+	},
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8",
+		"app-plus": {
+			"background": "#efeff4"
+		}
+	}
+}
