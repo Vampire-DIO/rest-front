@@ -1,14 +1,18 @@
 <template>
-	<view class="container">
-
-		<page-meta :background-text-style="bgTextStyle" :background-color="bgColor" :background-color-top="bgColorTop"
-			:background-color-bottom="bgColorBottom" :scroll-top="scrollTop" page-style="color: green"
-			root-font-size="16px">
-			<navigation-bar :title="nbTitle" :loading="nbLoading" :front-color="nbFrontColor"
-				:background-color="nbBackgroundColor" />
-		</page-meta>
-		<view class="content">
-		</view>
+	<view class="order-view">
+		<view class="commodity" style="display: flex; position: fixed;left: 0; right: 0;">
+			<view class="order-left" style="background-color: aqua; height: 100px; width: 150rpx; overflow-y: auto;">
+				
+			</view>
+			
+			<view class="order-right" style="background-color: blue; height: 100px;flex: 1;">
+				
+			</view>
+			<u-modal v-model="modalShow" content="aasdasd"></u-modal>
+					<u-button @click="modalShow = true">
+						打开模态框
+					</u-button>
+		</view>	
 	</view>
 </template>
 
@@ -16,6 +20,7 @@
 	export default {
 		data() {
 			return {
+				modalShow:true,
 				bgTextStyle: 'dark',
 				scrollTop: '200rpx',
 				bgColor: '#ff0000',

@@ -22,7 +22,11 @@
 		},
 		{
 			"path": "pages/login/login"
+		},
+		{
+			"path": "pages/order/detail"
 		}
+		
 
 	],
 	"tabBar": {
