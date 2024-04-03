@@ -3,7 +3,7 @@
 		<uni-section title="全部订单" type="line">
 			<view class="order-list" v-for="(item,index) in orders">
 				<uni-card :title="item.shopName" :sub-title="item.createTime" :extra="getStatus(item.status)"
-					:thumbnail="item.menuList[0].pics[0]">
+					:thumbnail="item.menuList[0].pics[0].url">
 					<view class="uni-body" style="display: flex;">
 						<u-button :ripple="true" size="medium" shape="circle" :disabled="true"
 							ripple-bg-color="#909399" :custom-style="customStyles[index]"

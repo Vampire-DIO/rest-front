@@ -20,12 +20,12 @@
 
 					<uni-card :is-full="true" margin=0 padding=0 spacing=0 v-for="(item, index) in menus" :key="index"
 						class="block-item" :id="'menuId-' +item.id">
-						<uni-swipe-action-item :disabled="isManager" :right-options="options" @click="swipClick">
+						<uni-swipe-action-item :disabled="isManager" :right-options="options" @click="swipClick($event,item)">
 							<view class="good-detail" :id="item.categoryId">
 								<swiper class="good-img-swiper" circular :indicator-dots="true" :autoplay="true"
 									:interval="2000" :duration="500">
 									<swiper-item v-for="(img, sIndex) in item.pics" :key="sIndex">
-										<image class="good-img" mode="aspectFit" :src="img" @error="imageLoadError">
+										<image class="good-img" mode="aspectFit" :src="img.url" @error="imageLoadError">
 										</image>
 									</swiper-item>
 								</swiper>
@@ -53,6 +53,10 @@
 
 		<uni-fab :pattern="pattern" @fabClick="showCart">
 
+		</uni-fab>
+		
+		<uni-fab :v-if="isManager" horizontal="right" :pattern="editPattern" @fabClick="addNewMenu">
+		
 		</uni-fab>
 
 		<u-popup :round="10" :show="show" @close="close" @open="open">
@@ -89,12 +93,37 @@
 				@click="createOrder">下单</u-button>
 		</u-popup>
 
-		<u-toast ref="uToast" />
-
-		<uModal v-model="modalShow" content="aasdasd"></uModal>
-		<uButton @click="modalShow = true">
-			打开模态框
-		</uButton>
+		<u-modal :title="modalTitle" cancelText="取消" confirmText="保存" :showCancelButton="true" 
+			:show="modalShow" 
+			@cancel="modalShow=false" 
+			@confirm="editSubmit" 
+			:asyncClose="true">
+				<u-form labelPosition="left" :model="editMenu">
+					<u-form-item label="名称">
+						<u-input v-model="editMenu.name"></u-input>
+					</u-form-item>
+					<u-form-item label="分类">
+						<uni-data-select v-model="editMenu.menuCategoryId"
+							:localdata="categorySelectData"></uni-data-select>
+					</u-form-item>
+					<u-form-item label="库存状态">
+						<uni-data-select v-model="editMenu.status"
+							:localdata="selectStatusData"></uni-data-select>
+					</u-form-item>
+					<u-form-item label="描述">
+						<u-textarea v-model="editMenu.description" count placeholder="描述简介">
+						</u-textarea>
+					</u-form-item>
+					<u-form-item label="价格">
+						<u-input v-model="editMenu.price"></u-input>
+					</u-form-item>
+					<u-form-item label="上传图片">
+						<u-upload :fileList="fileList" @afterRead="uploadAfter" @delete="deletePic" multiple
+							:previewFullImage="true">
+						</u-upload>
+					</u-form-item>
+				</u-form>
+		</u-modal>
 	</view>
 
 
@@ -106,13 +135,13 @@
 	import uButton from "uview-ui/components/u-button/u-button.vue";
 	import request from '@/request.js';
 	export default {
-		components:{
+		components: {
 			uModal,
 			uButton
 		},
 		data() {
 			return {
-				modalShow: true,
+				modalShow: false,
 				isManager: false,
 				options: [{
 					text: '编辑',
@@ -135,6 +164,11 @@
 					buttonColor: "pink",
 					icon: "cart",
 				},
+				editPattern:{
+					backgroundColor: "green",
+					buttonColor: "pink",
+					icon: "cloud-upload-filled",
+				},
 				cartShow: true,
 				name: '',
 				shopId: 15,
@@ -145,7 +179,30 @@
 				token: '',
 				categorys: [],
 				menus: [],
-				cart: []
+				cart: [],
+				categorySelectData: [],
+				editMenu: {
+					name: '',
+					description: '',
+					menuCategoryId: 0,
+					price: 0,
+					pictures: [],
+					status: ''
+				},
+				fileList: [],
+				// true 编辑, false 新增
+				isEdit: true,
+				modalTitle: '编辑菜单',
+				selectStatusData:[
+					{
+						value: '有货',
+						text: '有货'
+					},
+					{
+						value:'售罄',
+						text: '售罄'
+					}
+				]
 			}
 		},
 
@@ -158,13 +215,157 @@
 			this.getData();
 		},
 		methods: {
-			swipClick(e) {
-				if (e.position === 'left') {
+			addNewMenu(){
+				this.isEdit = false;
+				this.modalTitle = '新增菜品';
+				this.modalShow = true;
+				this.editMenu = {
+					name: '',
+					description: '',
+					menuCategoryId: 0,
+					price: 0,
+					pictures: []
+				}
+			},
+			deletePic(event) {
+				this[`fileList${event.name}`].splice(event.index, 1);
+				this.editMenu.pictures.splice(event.index,1);
+			},
+			async uploadAfter(event) {
+				let lists = [].concat(event.file);
+				let fileListLen = this[`fileList${event.name}`].length
+				lists.map((item) => {
+					this[`fileList${event.name}`].push({
+						...item,
+						status: 'uploading',
+						message: '上传中'
+					})
+				})
+				for (let i = 0; i < lists.length; i++) {
+					const result = await this.uploadFilePromise(lists[i].url)
+					let item = this[`fileList${event.name}`][fileListLen]
+					this[`fileList${event.name}`].splice(fileListLen, 1, Object.assign(item, {
+						status: 'success',
+						message: '',
+						url: result
+					}))
+					fileListLen++
+				}
+				console.log('file', this.fileList);
+			},
+			uploadFilePromise(url) {
+				return new Promise((resolve, reject) => {
+					let token = uni.getStorageSync('token');
+					let a = uni.uploadFile({
+						url: 'http://localhost:8081/picture', // 仅为示例，非真实的接口地址
+						filePath: url,
+						name: 'file',
+						header: {
+							'token': token
+						},
+						success: (res) => {
+							if(res.statusCode === 200){
+								let data = JSON.parse(res.data);
+								if (data.code === 0){
+									this.editMenu.pictures.push(data.data);
+								}else {
+									uni.showToast({
+										title: data.message,
+										icon: 'error',
+										duration: 1500
+									})
+								}
+							}
+							setTimeout(() => {
+								resolve(res.data.data)
+							}, 1000)
+						}
+					});
+				})
+			},
+			editSubmit() {
+				if(this.isEdit){
 					// 编辑
-
+					request('/menu','PUT',this.editMenu,'')
+					.then((res)=>{
+						console.log('res.data', res.data);
+						uni.showToast({
+							title: '保存成功',
+							icon: 'success',
+							duration: 1500
+						})
+						this.modalShow = false;
+						this.getData();
+					}).catch((err)=>{
+						console.log(err);
+						uni.showToast({
+							title: err.data.message,
+							icon: 'error',
+							duration: 1500
+						})
+						this.modalShow = false;
+					})
+				}else {
+					// 新增
+					request('/menu', 'POST', this.editMenu, '')
+					.then((res) => {
+						uni.showToast({
+							title: '保存成功',
+							icon: 'success',
+							duration: 1500
+						})
+						this.modalShow = false;
+						this.getData();
+					})
+					.catch((err)=>{
+						uni.showToast({
+							title: err.data.message,
+							icon: 'error',
+							duration: 1500
+						})
+						this.modalShow = false;
+					})
+				}
+			},
+			swipClick(e,item) {
+				console.log(e,item);
+				if (e.index === 0) {
+					// 编辑
+					this.modalShow = true;
+					this.modalTitle = '编辑菜单';
+					this.isEdit = true;
+					this.editMenu.name = item.name;
+					this.editMenu.description = item.description;
+					this.editMenu.price = item.price;
+					this.editMenu.status = item.status;
+					this.editMenu.menuCategoryId = item.categoryId;
+					this.editMenu.pictures = [],
+					this.editMenu.id = item.id;
+					item.pics.forEach(f=>{
+						let file = {
+							url: f.url
+						}
+						this.fileList.push(file);
+						this.editMenu.pictures.push(f.id);
+					})
 				} else {
 					// 删除
-
+					request('/menu/'+ item.id,'DELETE', {},'')
+						
+					.then((res)=>{
+						uni.showToast({
+							title: '成功',
+							icon: 'success',
+							duration: 1500
+						});
+						this.getData();
+					}).catch((err)=>{
+						uni.showToast({
+							title: err.data.message,
+							icon: 'error',
+							duration: 1500
+						})
+					})
 				}
 			},
 			lower() {
@@ -197,20 +398,19 @@
 				this.menus = item.menus;
 			},
 			changeValue(item) {
+				console.log(item)
 				let index = this.cart.findIndex(i => i.id === item.id);
 				if (index === -1) {
 					this.cart.push(item);
 				} else {
 					this.cart.splice(index, 1, item);;
 				}
-				console.log('cart', this.cart);
 			},
 			showCart() {
 				this.show = true;
 				let cart = this.cart.filter(item => item.quantity > 0).map(item => ({
 					...item
 				}));
-				console.log(cart);
 				this.cart = cart;
 			},
 			open() {
@@ -230,12 +430,29 @@
 			getData() {
 				request('/menu/list?shopId=' + this.shopId, 'GET', {}, 'menu')
 					.then((res) => {
-						console.log('data', res);
+						console.log('data', res.data);
+						this.categorySelectData = [];
+						res.data.forEach(f => {
+							let data = {
+								text: f.categoryName,
+								value: f.categoryId
+							};
+							this.categorySelectData.push(data);
+							if (f.menus.length != 0){
+								let menuWithQunatity = f.menus.map(item=>{
+									return{
+										...item,
+										quantity: 0
+									}
+								});
+								f.menus = menuWithQunatity;
+							}
+						});
 						this.categorys = res.data;
 						this.menus = this.categorys[0].menus;
 						this.selectCardId = this.categorys[0].categoryId;
+						console.log('cateog',this.categorys)
 					}).catch((err) => {
-						console.log(err)
 						uni.showToast({
 							title: err.errMsg,
 							icon: 'error',
@@ -257,10 +474,8 @@
 					'shopId': 15,
 					'menuIds': ids
 				};
-				console.log('req', data);
 				request('/order', 'POST', data, 'menu')
 					.then((res) => {
-						console.log('order', res);
 						if (res.code === 0) {
 							uni.showToast({
 								title: '下单成功',
@@ -273,7 +488,6 @@
 							});
 						}
 					}).catch((err) => {
-						console.log('err', err)
 						this.show = false;
 						uni.showToast({
 							title: err.data.message,
